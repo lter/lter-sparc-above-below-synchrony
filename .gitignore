@@ -1,0 +1,87 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# User-specific files
+.Ruserdata
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# RStudio files
+.Rproj.user/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
+
+# knitr and R markdown default cache directories
+*_cache/
+/cache/
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
+
+# R Environment Variables
+.Renviron
+
+# Mac stuff
+.DS_Store
+
+# Project file
+*.Rproj
+
+# Microsoft Office partial files
+~$*.pptx
+~$*.xlsx
+~$*.docx
+
+# Image file types
+*.png
+*.jpeg
+*.jpg
+
+# Spatial data file types
+## Shapefile components
+*.shp
+*.shx
+*.sbn
+*.sbx
+*.shp.xml
+*.shx.xml
+*.prj
+*.dbf
+*.cpg
+## Non-shapefile spatial data
+*.nc
+*.tif
+*.geojson
+
+# Other file types
+*.pdf
+*.zip
+
+# Data file types
+## Delete the hashtag (on the left in the following lines) if you _would_ like to ignore this file type
+# *.csv 
+# *.xlsx 
+# *.xls 
+# *.txt
+
+# Folders to ignore
+## Add any folders you’d like to ignore below (with or without the trailing slash)
+# data/
+# graphs/
