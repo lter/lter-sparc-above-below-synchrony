@@ -1,7 +1,12 @@
-# GROUP NAME HERE
+# Integrating above-and belowground community data to understand ecosystem temporal dynamics and responses to global change
 
 Principal Investigators:
-- PI NAME HERE
+
+- Ashley Bulseco
+- Smriti Pehim Limbu
+- Abigail Borgmeier
+- L. McKinley Nevins
+- Francis Andrea Chaves Rodriguez
 
 ## Script Explanations
 
