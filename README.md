@@ -1,4 +1,4 @@
-# Integrating above-and belowground community data to understand ecosystem temporal dynamics and responses to global change
+# Above-Belowground Synchrony and Coupling
 
 Principal Investigators:
 
