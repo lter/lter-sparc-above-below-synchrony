@@ -14,7 +14,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 querystring = 'q=text:(above* OR plant* OR vegetation) AND text:(below* OR soil OR rhizosphere OR microb*) AND text:("paired" OR "coupled" OR "linked") AND (-obsoletedBy:* AND formatType:METADATA)'
 
 # Parameters specific to DataONE
-params <- 'fl=id,title,formatId,seriesId&rows=100000&wt=xml'
+params <- 'fl=id,title,formatId,seriesId&rows=100000&wt=xml' #&start=9999'
 # Colons, commas, and spaces need to be encoded 
 querystring <- gsub(':', '%3A', gsub(',', '%2C', gsub(' ', '%20', paste(querystring, params, sep='&'))))
 querystring
@@ -25,7 +25,8 @@ result_xml  <- httr2::request(paste0('https://cn.dataone.org/cn/v2/query/solr/?'
   httr2::resp_body_string() |>
   read_xml()
 
-# Check results
+# Check results. If there are more than 10000 found, collect additional 
+# results using the "start" query parameter.
 numfound <- xml_attr(xml_find_all(result_xml, ".//result"), 'numFound')
 numreturned <- length(xml_find_all(result_xml, ".//doc"))
 
