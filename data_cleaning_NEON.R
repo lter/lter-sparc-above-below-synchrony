@@ -259,7 +259,7 @@ write.csv(bacteria_df2, "~/Dropbox/WSU/LTER_SPARC/NEON/clean_NEON_16S_COMP.csv")
 fungi_sub <- select(fungi, domainID, siteID, plotID, collectDate, analysisDate, geneticSampleID, 
                      downloadFileUrl, downloadFileName, sequenceCountQF)
 
-#starting with 8,559 csv files 
+#starting with 11,232 csv files 
 
 fungi_sub$sequenceCountQF <- as.factor(fungi_sub$sequenceCountQF)
 

@@ -74,10 +74,10 @@ source(paste0(wd, "/neon_token_source.R"))
 
 plants <- neonUtilities::loadByProduct(
   dpID = "DP1.10058.001", # the NEON plant presence and percent cover data product
-  site = c("BONA", "CLBJ", "CPER", "GUAN", "HARV", "KONZ", "NIWO", "ONAQ",
-           "ORNL", "OSBS", "PUUM", "SCBI", "SJER", "SRER", "TALL", "TOOL",
-           "UNDE", "WOOD", "WREF", "YELL"), # doing just core sites that have compatible data with belowground 
-  startdate = "2016-01", # start year-month - no compatible belowground data earlier than this 
+  # site = c("BONA", "CLBJ", "CPER", "GUAN", "HARV", "KONZ", "NIWO", "ONAQ",
+        #   "ORNL", "OSBS", "PUUM", "SCBI", "SJER", "SRER", "TALL", "TOOL",
+        #   "UNDE", "WOOD", "WREF", "YELL"), # doing just core sites that have compatible data with belowground 
+  startdate = "2018-01", # start year-month - no compatible belowground data earlier than this 
   enddate = "2023-12", # end year-month - data release is through December 2023
   token = Sys.getenv("NEON_TOKEN"), # use NEON_TOKEN environmental variable
   check.size = F) # proceed with download regardless of file size
