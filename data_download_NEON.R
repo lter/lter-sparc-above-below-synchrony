@@ -70,7 +70,7 @@ source(paste0(wd, "/neon_token_source.R"))
 
 # DOWNLOAD
 
-# Test download of the plant data 
+# Plant data 
 
 plants <- neonUtilities::loadByProduct(
   dpID = "DP1.10058.001", # the NEON plant presence and percent cover data product
@@ -170,9 +170,17 @@ saveRDS(microbes_com,"~/Dropbox/WSU/LTER_SPARC/NEON/NEON_microbe_comp_data_2024.
 
 #########################################################################################################
 
+
+
 ######################
+# STOP
+
 # !! These are available if desired, but haven't been downloaded yet !! 
+# Could focus sites and date range depending on core plant/microbe data choices before downloading, 
+# to make these easier to manage 
 ######################
+
+
 
 
 # DOWNLOAD
