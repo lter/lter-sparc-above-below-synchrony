@@ -42,6 +42,6 @@ download_neon(dpi = "DP1.10081.002",
               start_yr = 2016, end_yr = 2023,
               prefix = "soil-microbe-comm-taxonomy_", 
               dest = file.path("data", "raw_neon"),
-              wanted_files = c("div_1m2Data", "div_10m2Data100m2Data", "variables_10058"))
+              wanted_files = c("mct_soilSampleMetadata_16S", "mct_soilSampleMetadata_ITS", "variables_10081"))
 
 # End ----
