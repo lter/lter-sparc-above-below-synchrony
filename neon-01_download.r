@@ -22,7 +22,7 @@ purrr::walk(.x = dir(path = file.path("tools"), pattern = "fxn_"),
 this_year <- as.numeric(stringr::str_sub(Sys.Date(), start = 1, end = 4))
 
 ## -------------------------------------- ##
-# Identify & Download Plant Data ----
+# Download Plant Presence/Percent Cover Data ----
 ## -------------------------------------- ##
 
 # Download plant precence & percent cover data for all years / sites
@@ -37,7 +37,7 @@ download_neon(dpi = "DP1.10058.001",
 rm(list = ls()); gc()
 
 ## -------------------------------------- ##
-
+# Download Soil Microbe Taxonomy Data ----
 ## -------------------------------------- ##
 
 # Downlaod soil microbe community taxonomy data for all years / sites
