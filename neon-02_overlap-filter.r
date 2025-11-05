@@ -165,8 +165,53 @@ for(k in seq_along(type_list_v01)){
 }
 
 ## -------------------------------------- ##
-# Assess Year Overlap ----
+# Assess Space Overlap ----
 ## -------------------------------------- ##
+
+# Unlist the space/time indices list
+overlap_v02 <- purrr::list_rbind(x = type_list_v02)
+
+# Check structure
+dplyr::glimpse(overlap_v02)
+
+# Identify years found in all data files
+good_spaces <- overlap_v02 |> 
+  # Pare down to only data we need right now
+  dplyr::select(type, dplyr::ends_with("ID")) |> 
+  dplyr::distinct() |> 
+  # Pivot into ultra long format
+  tidyr::pivot_longer(cols = dplyr::ends_with("ID"),
+                      names_to = "space_cat", values_to = "space_level") |> 
+  # Count types of data per space category and level
+  dplyr::group_by(space_cat, space_level) |> 
+  dplyr::summarize(type_ct = length(unique(type)),
+                   type_names = paste(unique(type), collapse = "; "),
+                   .groups = "keep") |> 
+  dplyr::ungroup() |> 
+  # Filter to only years with all types of data
+  dplyr::filter(type_ct == length(unique(overlap_v02$type)))
+  
+# Check structure
+dplyr::glimpse(good_spaces)
+
+# Make a new list
+type_list_v03 <- list()
+
+# Loop across bits of the previous type list
+for(k in seq_along(type_list_v02)){
+
+  # Grab that list element
+  space_v01 <- type_list_v02[[k]]
+
+  # Pare down to only good spaces
+  space_v02 <- space_v01 |> 
+    dplyr::filter(domainID %in% dplyr::filter(good_spaces, space_cat == "domainID")$space_level) |> 
+    dplyr::filter(siteID %in% dplyr::filter(good_spaces, space_cat == "siteID")$space_level) |> 
+    dplyr::filter(plotID %in% dplyr::filter(good_spaces, space_cat == "plotID")$space_level)
+
+  # Add to the new list
+  type_list_v03[[k]] <- space_v02
+}
 
 
 
