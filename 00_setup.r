@@ -13,5 +13,6 @@ rm(list = ls()); gc()
 
 # Make needed folder(s)
 dir.create(path = file.path("data", "raw_neon"), showWarnings = F, recursive = T)
+dir.create(path = file.path("data", "filtered_neon"), showWarnings = F, recursive = T)
 
 # End ----
