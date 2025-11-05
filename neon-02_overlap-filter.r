@@ -17,7 +17,7 @@ rm(list = ls()); gc()
 spacetime_vars <- c("namedLocation", "domainID", "siteID", "plotID", "endDate", "collectDate")
 
 ## -------------------------------------- ##
-# Make Index of Spatiotemporal Info ----
+# Make Spatiotemporal Indices ----
 ## -------------------------------------- ##
 
 # Identify locally-present data files
@@ -31,6 +31,9 @@ local_data <- local_all[stringr::str_detect(string = local_all, pattern = "varia
 # Identify types of tables (other than variables data)
 (local_types <- unique(gsub(pattern = "plant-presence-percent-cover_|soil-microbe-comm-taxonomy_|_[[:digit:]]{4}.csv", 
                             replacement = "", x = local_data)))
+
+# Make a list for storing type outputs
+type_list_v01 <- list()
 
 # Loop across types of data
 for(focal_type in local_types){
@@ -56,10 +59,13 @@ for(focal_type in local_types){
     focal_v02 <- focal_v01 |> 
       # Streamline this to just the spatiotemporal columns
       dplyr::select(dplyr::contains(spacetime_vars)) |> 
+      dplyr::select(-dplyr::contains("subplot")) |> 
       # Drop non-unique rows
       dplyr::distinct() |> 
-      # Add filename as a column
-      dplyr::mutate(source = focal_csv, .before = dplyr::everything())
+      # Add file name/type as columns
+      dplyr::mutate(type = focal_type, 
+                    source = focal_csv, 
+                    .before = dplyr::everything())
 
     # Add to list
     out_list[[focal_csv]] <- focal_v02
@@ -81,7 +87,8 @@ for(focal_type in local_types){
         collectDay = stringr::str_sub(string = collectDate, start = 9, end = 10)
       ) |> 
       # Assemble tidy date column
-      dplyr::mutate(tidyDate = as.Date(paste(collectYear, collectMonth, collectDay, sep = "/"))) |> 
+      dplyr::mutate(tidyDate = as.Date(paste(collectYear, collectMonth, collectDay, sep = "/")),
+                    tidyYearMonth = paste0(collectYear, "-", collectMonth)) |> 
       # Remove superseded date column
       dplyr::select(-collectDate)
 
@@ -97,7 +104,8 @@ for(focal_type in local_types){
         collectDay = stringr::str_sub(string = endDate, start = 9, end = 10)
       ) |> 
       # Assemble tidy date column
-      dplyr::mutate(tidyDate = as.Date(paste(collectYear, collectMonth, collectDay, sep = "/"))) |> 
+      dplyr::mutate(tidyDate = as.Date(paste(collectYear, collectMonth, collectDay, sep = "/")),
+                    tidyYearMonth = paste0(collectYear, "-", collectMonth)) |> 
       # Remove superseded date column
       dplyr::select(-endDate)
 
@@ -106,22 +114,72 @@ for(focal_type in local_types){
     out_v02 <- out_v01
   }
 
-  # Export locally
-  write.csv(x = out_v02, na = '', row.names = F,
-            file = file.path("data", "indices_neon", 
-                             paste0("neon-spacetime-index_", focal_type, ".csv")))
+  # And add to list
+  type_list_v01[[focal_type]] <- out_v02
 
 } # Close among-type loop
 
+## -------------------------------------- ##
+# Assess Year Overlap ----
+## -------------------------------------- ##
 
-str(focal_v02)
+# Unlist the space/time indices list
+overlap_v01 <- purrr::list_rbind(x = type_list_v01)
+
+# Check structure
+dplyr::glimpse(overlap_v01)
+
+# Identify years found in all data files
+good_years <- overlap_v01 |> 
+  # Pare down to only data we need right now
+  dplyr::select(type, collectYear) |> 
+  dplyr::distinct() |> 
+  # Count types of data per year
+  dplyr::group_by(collectYear) |> 
+  dplyr::summarize(type_ct = length(unique(type)),
+                   type_names = paste(unique(type), collapse = "; "),
+                   .groups = "keep") |> 
+  dplyr::ungroup() |> 
+  # Filter to only years with all types of data
+  dplyr::filter(type_ct == length(unique(overlap_v01$type))) |> 
+  # Grab just the years
+  dplyr::pull(collectYear)
+
+# What years had good overlap?
+sort(unique(good_years))
+
+# Make a new list
+type_list_v02 <- list()
+
+# Loop across bits of the previous type list
+for(k in seq_along(type_list_v01)){
+
+  # Grab that list element
+  year_v01 <- type_list_v01[[k]]
+
+  # Pare down to only good years
+  year_v02 <- dplyr::filter(year_v01, collectYear %in% good_years)
+
+  # Add to the new list
+  type_list_v02[[k]] <- year_v02
+}
+
+## -------------------------------------- ##
+# Assess Year Overlap ----
+## -------------------------------------- ##
 
 
 
+
+
+  # Export locally
+ #  write.csv(x = out_v02, na = '', row.names = F,
+  #           file = file.path("data", "indices_neon", 
+   #                           paste0("neon-spacetime-index_", focal_type, ".csv")))
+  
 
 
 ## -------------------------------------- ##
-# Identify Overlapped Years ----
 ## -------------------------------------- ##
 
 # List files of both types
