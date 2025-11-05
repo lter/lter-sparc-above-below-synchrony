@@ -11,8 +11,10 @@ rm(list = ls()); gc()
 # Create Folders ----
 ## -------------------------------------- ##
 
-# Make needed folder(s)
+# Make needed NEON-specific folder(s)
 dir.create(path = file.path("data", "raw_neon"), showWarnings = F, recursive = T)
-dir.create(path = file.path("data", "filtered_neon"), showWarnings = F, recursive = T)
+dir.create(path = file.path("data", "filtered_neon"), showWarnings = F)
+dir.create(path = file.path("data", "indices_neon"), showWarnings = F)
+
 
 # End ----
