@@ -14,7 +14,7 @@ source(file = file.path("00_setup.r"))
 rm(list = ls()); gc()
 
 # Identify the key columns used to identify space/time in **ALL** relevant NEON files
-spacetime_vars <- c("namedLocation", "domainID", "siteID", "plotID", "endDate", "collectDate")
+spacetime_vars <- c("domainID", "siteID", "plotID", "endDate", "collectDate")
 
 ## -------------------------------------- ##
 # Make Spatiotemporal Indices ----
@@ -213,21 +213,75 @@ for(k in seq_along(type_list_v02)){
   type_list_v03[[k]] <- space_v02
 }
 
-
-
-
-
-  # Export locally
- #  write.csv(x = out_v02, na = '', row.names = F,
-  #           file = file.path("data", "indices_neon", 
-   #                           paste0("neon-spacetime-index_", focal_type, ".csv")))
-  
-
-
 ## -------------------------------------- ##
+# Assess Month Overlap ----
 ## -------------------------------------- ##
 
-# List files of both types
+# Unlist the space/time indices list
+overlap_v03 <- purrr::list_rbind(x = type_list_v03)
+
+# Check structure
+dplyr::glimpse(overlap_v03)
+
+# Identify years found in all data files
+good_months <- overlap_v03 |> 
+  # Pare down to only data we need right now
+  dplyr::select(type, siteID, plotID, tidyYearMonth) |> 
+  dplyr::distinct() |> 
+  # Count types of data per year/month
+  dplyr::group_by(siteID, plotID, tidyYearMonth) |> 
+  dplyr::summarize(type_ct = length(unique(type)),
+                    type_names = paste(unique(type), collapse = "; "),
+                    .groups = "keep") |> 
+  dplyr::ungroup()
+
+# Check structure
+dplyr::glimpse(good_months)
+
+# We'll use this differently than the others so we need to do a touch more wrangling
+bad_months <- good_months |> 
+  # Keep only **BAD** months (i.e., those without all types of data)
+  dplyr::filter(type_ct != length(unique(overlap_v03$type))) |> 
+  # Ditch summary columns
+  dplyr::select(-dplyr::starts_with("type_"))
+
+# Make a new list
+type_list_v04 <- list()
+
+# Loop across bits of the previous type list
+for(k in seq_along(type_list_v03)){
+
+  # Grab that list element
+  month_v01 <- type_list_v03[[k]]
+
+  # Pare down to only good months
+  month_v02 <- month_v01 |> 
+    ## Can do a complex filter by anti joining with 'bad months'!
+    dplyr::anti_join(y = bad_months, by = c("siteID", "plotID", "tidyYearMonth"))
+
+  # Add to the new list
+  type_list_v04[[k]] <- month_v02
+}
+
+## -------------------------------------- ##
+# Export Indices
+## -------------------------------------- ##
+
+# Make a new list object (in case we need more filtering upstream)
+type_list_v99 <- type_list_v04
+
+# Loop across types of data
+for(k in seq_along(type_list_v99)){
+
+  # Export just that file
+  write.csv(x = type_list_v99[[k]], na = '', row.names = F,
+            file = file.path("data", "indices_neon", 
+                             paste0("neon-spacetime-index_", 
+                                    unique(type_list_v99[[k]]$type), 
+                                    ".csv")))
+}
+
+
 
 
 
