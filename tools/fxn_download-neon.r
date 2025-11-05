@@ -50,7 +50,7 @@ download_neon <- function(dpi = NULL, start_yr = NULL, end_yr = NULL,
   
     # Skip this year if we already have the expected number of files
     ## Note that the expected number of local files is hard-coded
-    if(length(local_data) == length(wanted_files) & redownload == FALSE){ 
+    if(all(paste0(prefix, wanted_files, "_", focal_yr, ".csv") %in% local_data) & redownload == FALSE){ 
       
       # Completion message
       message("Data for ", focal_yr, " already downloaded")
