@@ -18,7 +18,7 @@ rm(list = ls()); gc()
 purrr::walk(.x = dir(path = file.path("tools"), pattern = "fxn_"),
             .f = ~ source(file.path("tools", .x)))
 
-# Grab current year & month
+# Grab current year
 this_year <- as.numeric(stringr::str_sub(Sys.Date(), start = 1, end = 4))
 
 ## -------------------------------------- ##
