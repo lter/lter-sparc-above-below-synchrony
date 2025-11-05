@@ -38,7 +38,8 @@ download_neon(dpi = "DP1.10058.001",
 # Downlaod soil microbe community taxonomy data for all years / sites
 download_neon(dpi = "DP1.10081.002", 
               ## Start year identified from NEON catalog
-              start_yr = 2016, end_yr = 2025,
+              ## There are no data post-2023
+              start_yr = 2016, end_yr = 2023,
               prefix = "soil-microbe-comm-taxonomy_", 
               dest = file.path("data", "raw_neon"),
               wanted_files = c("div_1m2Data", "div_10m2Data100m2Data", "variables_10058"))
