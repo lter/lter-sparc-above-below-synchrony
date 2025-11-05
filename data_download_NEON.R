@@ -15,7 +15,7 @@ library(neonUtilities); packageVersion("neonUtilities")
 library(ecocomDP); packageVersion("ecocomDP")
 
 #################################################################################
-#                               Main workflow                                   #
+#                               Main Workflow                                   #
 #  Use the neonUtilities package to download data from the NEON sites for       #
 #  above and belowground community surveys.                                     #
 #                                                                               #
@@ -74,11 +74,11 @@ source(paste0(wd, "/neon_token_source.R"))
 
 plants <- neonUtilities::loadByProduct(
   dpID = "DP1.10058.001", # the NEON plant presence and percent cover data product
-  # site = c("BONA", "CLBJ", "CPER", "GUAN", "HARV", "KONZ", "NIWO", "ONAQ",
-        #   "ORNL", "OSBS", "PUUM", "SCBI", "SJER", "SRER", "TALL", "TOOL",
-        #   "UNDE", "WOOD", "WREF", "YELL"), # doing just core sites that have compatible data with belowground 
-  startdate = "2018-01", # start year-month - no compatible belowground data earlier than this 
-  enddate = "2023-12", # end year-month - data release is through December 2023
+  site = c("BONA", "CLBJ", "CPER", "GUAN", "HARV", "KONZ", "NIWO", "ONAQ",
+           "ORNL", "OSBS", "PUUM", "SCBI", "SJER", "SRER", "TALL", "TOOL",
+           "UNDE", "WOOD", "WREF", "YELL"), # doing just core sites that have compatible data with belowground 
+  startdate = "2016-01", # start year-month - no compatible belowground data earlier than this 
+  enddate = "2024-12", # end year-month - data release is through December 2023
   token = Sys.getenv("NEON_TOKEN"), # use NEON_TOKEN environmental variable
   check.size = F) # proceed with download regardless of file size
 
@@ -105,21 +105,24 @@ plants %>% list2env(.GlobalEnv)
 # following team naming conventions for the data file 
 
 # 1m subplot data 
-write.csv(div_1m2Data,"~/Dropbox/WSU/LTER_SPARC/NEON/A_COM_NEON_001.csv", row.names = FALSE)
+write.csv(div_1m2Data,"~/Dropbox/WSU/LTER_SPARC/NEON/Plants_1m_NEON.csv", row.names = FALSE)
 
 # 10 and 100 m subplot data 
-write.csv(div_10m2Data100m2Data,"~/Dropbox/WSU/LTER_SPARC/NEON/A_COM_NEON_002.csv", row.names = FALSE)
+write.csv(div_10m2Data100m2Data,"~/Dropbox/WSU/LTER_SPARC/NEON/Plants_10m_NEON.csv", row.names = FALSE)
 
 # list of variables 
-write.csv(variables_10058,"~/Dropbox/WSU/LTER_SPARC/NEON/A_COM_NEON_001.2_meta.csv", row.names = FALSE)
+write.csv(variables_10058,"~/Dropbox/WSU/LTER_SPARC/NEON/Plants_NEON_meta.csv", row.names = FALSE)
 
 # save the whole stack of files as an R object so I could load it back in later if necessary 
-saveRDS(plants,"~/Dropbox/WSU/LTER_SPARC/NEON/NEON_plant_data_2022.rds")
-
-test <- readRDS("~/Dropbox/WSU/LTER_SPARC/NEON/NEON_plant_data_2022.rds")
+saveRDS(plants,"~/Dropbox/WSU/LTER_SPARC/NEON/NEON_plant_data.rds")
 
 
 #########################################################################################################
+
+#####################
+## Exploratory, Geoff is doing the raw sequences 
+#####################
+
 
 # DOWNLOAD
 
@@ -171,7 +174,6 @@ saveRDS(microbes_com,"~/Dropbox/WSU/LTER_SPARC/NEON/NEON_microbe_comp_data_2024.
 #########################################################################################################
 
 
-
 ######################
 # STOP
 
@@ -179,7 +181,6 @@ saveRDS(microbes_com,"~/Dropbox/WSU/LTER_SPARC/NEON/NEON_microbe_comp_data_2024.
 # Could focus sites and date range depending on core plant/microbe data choices before downloading, 
 # to make these easier to manage 
 ######################
-
 
 
 
