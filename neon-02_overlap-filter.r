@@ -281,11 +281,124 @@ for(k in seq_along(type_list_v99)){
                                     ".csv")))
 }
 
+## -------------------------------------- ##
+# Actually Stack & Filter Data ----
+## -------------------------------------- ##
 
+# Which data files should we consider?
+good_files <- purrr::list_rbind(type_list_v99) |> 
+  dplyr::pull(source) |> 
+  unique()
 
+# Grab a 'final' data object indicating the desired spaces/times
+overlap_v99 <- type_list_v99[[1]] |> 
+  dplyr::select(-type, -source) |> 
+  dplyr::mutate(keep = "YES")
 
+# Check structure
+dplyr::glimpse(overlap_v99)
 
+# Loop across types of data
+for(focal_type in local_types){
+  # focal_type <- "div_10m2Data100m2Data"
 
+  # Progress message
+  message("Stacking and filtering ", focal_type, " to only rows overlapping other data")
 
+  # Identify just the files of that type
+  focal_files <- local_data[stringr::str_detect(string = local_data, pattern = focal_type)]
+
+  # Keep just the files that contain some rows we want
+  wanted_files <- intersect(x = focal_files, y = good_files)
+
+  # Generate a list for storing outputs
+  out_list <- list()
+
+  # Loop across those files
+  for(focal_csv in wanted_files){
+    # focal_csv <- "plant-presence-percent-cover_div_10m2Data100m2Data_2019.csv"
+
+    # Progress message
+    message("Stacking file '", focal_csv, "'")
+
+    # Read in the data
+    focal_v01 <- read.csv(file = file.path("data", "raw_neon", focal_csv))
+
+    # Process this slightly
+    focal_v02 <- focal_v01 |> 
+      # Add file name/type as columns
+      dplyr::mutate(type = focal_type, 
+                    source = focal_csv, 
+                    .before = dplyr::everything())
+
+    # Add to list
+    out_list[[focal_csv]] <- focal_v02
+
+  } # Close within-type loop
+
+  # Unlist the list to a long table
+  out_v01 <- purrr::list_rbind(x = out_list)
+
+  # Wrangle date columns based on which is in the data
+  if("collectDate" %in% names(out_v01)){
+
+    # Do needed wrangling
+    out_v02 <- out_v01 |> 
+      # Strip out date information
+      dplyr::mutate(
+        collectYear = stringr::str_sub(string = collectDate, start = 1, end = 4),
+        collectMonth = stringr::str_sub(string = collectDate, start = 6, end = 7),
+        collectDay = stringr::str_sub(string = collectDate, start = 9, end = 10),
+        .after = collectDate) |> 
+      # Assemble tidy date column
+      dplyr::mutate(tidyDate = as.Date(paste(collectYear, collectMonth, collectDay, sep = "/")),
+                    tidyYearMonth = paste0(collectYear, "-", collectMonth),
+                    .after = collectDate) |> 
+      # Remove superseded date column
+      dplyr::select(-collectDate)
+
+    # Handle data with 'endDate'
+  } else if("endDate" %in% names(out_v01)){
+
+    # Do needed wrangling
+    out_v02 <- out_v01 |> 
+      # Strip out date information
+      dplyr::mutate(
+        collectYear = stringr::str_sub(string = endDate, start = 1, end = 4),
+        collectMonth = stringr::str_sub(string = endDate, start = 6, end = 7),
+        collectDay = stringr::str_sub(string = endDate, start = 9, end = 10),
+        .after = endDate) |> 
+      # Assemble tidy date column
+      dplyr::mutate(tidyDate = as.Date(paste(collectYear, collectMonth, collectDay, sep = "/")),
+                    tidyYearMonth = paste0(collectYear, "-", collectMonth),
+                    .after = endDate) |> 
+      # Remove superseded date column
+      dplyr::select(-endDate)
+
+  } else { 
+    message("No date wrangling performed; clarify date column")
+    out_v02 <- out_v01
+  }
+
+  # Now, actually filter to good spaces/times
+  out_v03 <- out_v02 |> 
+    # Attach data of good spaces/times
+    dplyr::left_join(y = overlap_v99, by = intersect(x = names(out_v02), y = names(overlap_v99))) |> 
+    # Use 'keep' column to retain only good spaces/times
+    dplyr::filter(keep == "YES") |> 
+    # Ditch that column
+    dplyr::select(-keep)
+
+  # Generate a nice file name
+  focal_stem <- unique(gsub(pattern = "_[[:digit:]]{4}\\.csv", replacement = "", x = wanted_files))
+  focal_minyr <- min(out_v03$collectYear, na.rm = T)
+  focal_maxyr <- max(out_v03$collectYear, na.rm = T)
+  focal_out <- paste0(focal_stem, "_", focal_minyr, "-", focal_maxyr, ".csv")
+
+  # Export it
+  write.csv(x = out_v03, na = '', row.names = F,
+            file = file.path("data", "filtered_neon", focal_out))
+
+} # Close among-type loop
 
 # End ----
