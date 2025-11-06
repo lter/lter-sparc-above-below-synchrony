@@ -232,7 +232,7 @@ full <- bind_rows(bacteria,fungi) %>%
                 rawDataFileName,rawDataFilePath,rawDataFileDescription,amplicon,read) %>% 
   unique.data.frame()
 saveRDS(full,"./full_microbiome_dataset_info.RDS")
-run="BTV4F"
+
 for(run in unique(full$sequencerRunID)){
   # subset to seqrun
   seqrun <- full %>% 
@@ -243,7 +243,9 @@ for(run in unique(full$sequencerRunID)){
   dir.create(file.path("./data/raw",run,"Fungi"),recursive = TRUE)
   
   # download the files to that directory
-  download.file(url=seqrun[["rawDataFilePath"]],destfile = file.path("./data/raw",run,seqrun[["amplicon"]],seqrun[["rawDataFileName"]]))
+  download.file(url=seqrun[["rawDataFilePath"]],
+                destfile = file.path("./data/raw",run,seqrun[["amplicon"]],seqrun[["rawDataFileName"]]),
+                method= "libcurl")
   
 }
 

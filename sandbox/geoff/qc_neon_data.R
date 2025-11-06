@@ -113,17 +113,11 @@ paired <- paired[-missing_files,]
 paired$forward_path <- unlist(paired$forward_path)
 paired$reverse_path <- unlist(paired$reverse_path)
 
-dim(paired)
-saveRDS(paired,"./paired_data.RDS")
-
-
-
 # now we have paired files for cutadapt
 
 # for each ROW (DNA reads sample), build the cutadapt call based on
 # forwardPrimer, reversePrimer, sequencerRunID, forward_path, reverse_path
 
-names(paired)
 
 # for each bacterial run (bact_dirs), run cutadapt
 # put output clean files into "./data/clean/RUNID/Bacteria"
@@ -140,23 +134,33 @@ for(samp in seq_along(paired$forward_path)){
   fwd_path <- paired$forward_path[samp]
   rev_path <- paired$reverse_path[samp]
   
+  # build clean fp info
+  fwd_path_out <- str_replace(fwd_path,"data/raw","data/clean")
+  rev_path_out <- str_replace(rev_path,"data/raw","data/clean")
   
+  # create output directory if doesn't exist
+  if(!dir.exists(dirname(fwd_path_out))){
+    dir.create(dirname(fwd_path_out),recursive = TRUE)
+  }
+  
+  # add new paths of cleaned files to paired dataframe
+  paired$clean_fwd_filepath <- NA
+  paired$clean_rev_filepath <- NA
+  paired$clean_fwd_filepath[samp] <- fwd_path_out
+  paired$clean_rev_filepath[samp] <- rev_path_out
+  
+  # cutadapt flags
+  R1.flags <- paste("-g", fwd_primer, "-a", rev_primer_rc)
+  R2.flags <- paste("-G", rev_primer, "-A", fwd_primer_rc) 
+  
+  system2("cutadapt", args = c(R1.flags, R2.flags, "-n", 2, "--minimum-length 100", # -n 2 required to remove FWD and REV from reads
+                               "-o", fwd_path_out, "-p", rev_path_out, # output files
+                               fwd_path, rev_path)) # input files
 }
 
+# export new seq metadata file
+saveRDS(paired,"./paired_data.RDS")
 
 
 
 
-
-## Functions ####
-
-
-
-
-# do this for each seq run
-
-
-
-# get forward and reverse primers
-
-# 
