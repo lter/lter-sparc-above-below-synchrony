@@ -10,7 +10,8 @@ Principal Investigators:
 
 ## Script Explanations
 
-Briefly describe the purpose of each script (or folder of scripts) here as you create them!
+- `neon-01_download.r` - Downloads NEON data on plants (% cover) and microbes (community taxonomy)
+- `neon-02_overlap-filter.r` - Check for spatiotemporal overlap between plants (% cover) and microbes (community taxonomy) data from NEON
 
 ## Contributing Guidelines & Style Guide
 

@@ -12,6 +12,25 @@ library(glue)
 ## Environment ####
 nthreads <- max(1, parallel::detectCores())
 
+## Functions ####
+
+# build all orientations of dna seqs
+allOrients <- function(primer) {
+  # Create all orientations of the input sequence
+  require(Biostrings)
+  dna <- DNAString(primer)  # The Biostrings works w/ DNAString objects rather than character vectors
+  orients <- c(Forward = dna, Complement = complement(dna), Reverse = reverse(dna), 
+               RevComp = reverseComplement(dna))
+  return(sapply(orients, toString))  # Convert back to character vector
+}
+
+primerHits <- function(primer, fn) {
+  # Counts number of reads in which the primer is found
+  nhits <- vcountPattern(primer, sread(readFastq(fn)), fixed = FALSE)
+  return(sum(nhits > 0))
+}
+
+
 ## Load metadata ####
 full <- readRDS("./full_microbiome_dataset_info.RDS")
 
@@ -99,14 +118,30 @@ saveRDS(paired,"./paired_data.RDS")
 
 
 
-# now we have paired files
+# now we have paired files for cutadapt
 
+# for each ROW (DNA reads sample), build the cutadapt call based on
+# forwardPrimer, reversePrimer, sequencerRunID, forward_path, reverse_path
 
+names(paired)
 
 # for each bacterial run (bact_dirs), run cutadapt
 # put output clean files into "./data/clean/RUNID/Bacteria"
 
-
+for(samp in seq_along(paired$forward_path)){
+  
+  # get primer info
+  fwd_primer <- paired$forwardPrimer[samp]
+  rev_primer <- paired$reversePrimer[samp]
+  fwd_primer_rc <- rc(fwd_primer)
+  rev_primer_rc <- rc(rev_primer)
+  
+  # get raw fp info
+  fwd_path <- paired$forward_path[samp]
+  rev_path <- paired$reverse_path[samp]
+  
+  
+}
 
 
 
@@ -114,23 +149,6 @@ saveRDS(paired,"./paired_data.RDS")
 
 
 ## Functions ####
-# build all orientations of dna seqs
-allOrients <- function(primer) {
-  # Create all orientations of the input sequence
-  require(Biostrings)
-  dna <- DNAString(primer)  # The Biostrings works w/ DNAString objects rather than character vectors
-  orients <- c(Forward = dna, Complement = complement(dna), Reverse = reverse(dna), 
-               RevComp = reverseComplement(dna))
-  return(sapply(orients, toString))  # Convert back to character vector
-}
-FWD.orients <- allOrients(FWD)
-REV.orients <- allOrients(REV)
-
-primerHits <- function(primer, fn) {
-  # Counts number of reads in which the primer is found
-  nhits <- vcountPattern(primer, sread(readFastq(fn)), fixed = FALSE)
-  return(sum(nhits > 0))
-}
 
 
 
