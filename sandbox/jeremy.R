@@ -1,2 +1,0 @@
-
-# Jeremy's lil' script
