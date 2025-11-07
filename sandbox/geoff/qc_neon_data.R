@@ -108,6 +108,9 @@ paired
 # clean up samples with a missing data (either fwd or rev)
 missing_files <- which(paired$forward_path %>% map_lgl(is.null) | paired$reverse_path %>% map_lgl(is.null))
 paired <- paired[-missing_files,]
+missing_primers <- which(is.na(paired$forwardPrimer) | is.na(paired$reversePrimer))
+paired <- paired[-missing_primers,]
+
 
 # clean up list cols
 paired$forward_path <- unlist(paired$forward_path)
@@ -153,14 +156,16 @@ for(samp in seq_along(paired$forward_path)){
   R1.flags <- paste("-g", fwd_primer, "-a", rev_primer_rc)
   R2.flags <- paste("-G", rev_primer, "-A", fwd_primer_rc) 
   
-  system2("cutadapt", args = c(R1.flags, R2.flags, "-n", 2, "--minimum-length 100", # -n 2 required to remove FWD and REV from reads
-                               "-o", fwd_path_out, "-p", rev_path_out, # output files
-                               fwd_path, rev_path)) # input files
+  # if the clean file exists already, skip
+  if(file.exists(fwd_path_out) & file.exists(rev_path_out)){
+    
+    system2("cutadapt", args = c(R1.flags, R2.flags, "-n", 2, "--minimum-length 100", # -n 2 required to remove FWD and REV from reads
+                                 "-o", fwd_path_out, "-p", rev_path_out, # output files
+                                 fwd_path, rev_path)) # input files
+  }
 }
 
 # export new seq metadata file
 saveRDS(paired,"./paired_data.RDS")
-
-
 
 
