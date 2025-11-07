@@ -43,15 +43,6 @@ fung_dirs <- dirs[grepl("Fungi",dirs)]
 # each individual paired sample needs to have its own cutadapt command
 # they could have different primers, for example
 
-# remove any that have missing samples
-duplicated(full$dnaSampleID)
-
-full %>% 
-  filter(dnaSampleID == "HARV_033-O-33.5-20.5-20170424-GEN-DNA1")
-
-full$dnaSampleID %>% table %>% as.data.frame %>% 
-  arrange(Freq) %>% 
-  filter(Freq %in% c(1,3,5,7,9))
 
 
 # find bacterial read pair filepaths
@@ -115,11 +106,14 @@ paired <- paired[-missing_primers,]
 # clean up list cols
 paired$forward_path <- unlist(paired$forward_path)
 paired$reverse_path <- unlist(paired$reverse_path)
+paired$clean_fwd_filepath <- NA
+paired$clean_rev_filepath <- NA
 
 # now we have paired files for cutadapt
 
 # for each ROW (DNA reads sample), build the cutadapt call based on
 # forwardPrimer, reversePrimer, sequencerRunID, forward_path, reverse_path
+
 
 
 # for each bacterial run (bact_dirs), run cutadapt
@@ -147,8 +141,6 @@ for(samp in seq_along(paired$forward_path)){
   }
   
   # add new paths of cleaned files to paired dataframe
-  paired$clean_fwd_filepath <- NA
-  paired$clean_rev_filepath <- NA
   paired$clean_fwd_filepath[samp] <- fwd_path_out
   paired$clean_rev_filepath[samp] <- rev_path_out
   
@@ -157,10 +149,11 @@ for(samp in seq_along(paired$forward_path)){
   R2.flags <- paste("-G", rev_primer, "-A", fwd_primer_rc) 
   
   # if the clean file exists already, skip
-  if(file.exists(fwd_path_out) & file.exists(rev_path_out)){
+  if(!file.exists(fwd_path_out) & !file.exists(rev_path_out)){
     
     system2("cutadapt", args = c(R1.flags, R2.flags, "-n", 2, "--minimum-length 100", # -n 2 required to remove FWD and REV from reads
                                  "-o", fwd_path_out, "-p", rev_path_out, # output files
+                                 "-j", nthreads,
                                  fwd_path, rev_path)) # input files
   }
 }
