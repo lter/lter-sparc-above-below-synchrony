@@ -4,6 +4,7 @@ library(httr2)
       
 # Start here for solr query info:
 # https://solr.apache.org/guide/solr/latest/query-guide/common-query-parameters.html
+# DataONE solr query fields: https://cn.dataone.org/cn/v2/query/solr
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
