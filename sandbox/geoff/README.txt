@@ -9,7 +9,7 @@ AllocTRES=cpu=20,mem=126000M
 2. ./qc_neon_data.R
 3. ./asv_tables_neon_data.R
 	template script. Replace placeholder with all possible sequence runs
-
+	Run on HPC, one job per NEON sequencing run
 4. ./taxonomy_neon_data.R
 
 
