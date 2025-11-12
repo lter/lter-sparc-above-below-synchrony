@@ -48,6 +48,10 @@ if(nrow(current_bact) > 0){
   dada2::filterAndTrim(fwd = fwd_fps, filt = fwd_filt,
                        rev = rev_fps, filt.rev = rev_filt,
                        compress = TRUE)
+  remaining_files <- file.exists(fwd_filt) & file.exists(rev_filt)
+  
+  fwd_filt <- fwd_filt[remaining_files]
+  rev_filt <- rev_filt[remaining_files]
   
   ## Learn errors
   bact_errF <- learnErrors(fwd_filt, 
@@ -98,6 +102,8 @@ if(nrow(current_fung) > 0){
 
   dada2::filterAndTrim(fwd = fwd_fps, filt = fwd_filt,
                        compress = TRUE)
+  fwd_filt <- fwd_filt[file.exists(fwd_filt)]
+  
 
   ## Learn errors
   fung_errF <- learnErrors(fwd_filt, 
