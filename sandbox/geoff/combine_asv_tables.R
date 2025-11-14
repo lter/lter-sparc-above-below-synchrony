@@ -21,6 +21,7 @@ n_dupl <- function(x){
 }
 
 ## Options ####
+
 # LOAD DATA ####
 
 ## Get metadata ####
@@ -78,6 +79,11 @@ bact_ps@sam_data$rawDataFileName <- NULL
 saveRDS(bact_ps,"./output/bacterial_physeq_no_taxonomy.RDS")
 saveRDS(bact,"./output/bacterial_asv_table_combined.RDS")
 
+# write ASVs to file for external taxonomic assignment
+bact_reads <- colnames(otu_table(bact_ps))
+names(bact_reads) <- bact_reads
+writeXStringSet(DNAStringSet(bact_reads), "./output/bact_asv.fasta", width=200000)
+
 # clean up
 rm(list=c("bact","bact_asvs"))
 gc()
@@ -111,7 +117,12 @@ fung_ps@sam_data$rawDataFileName <- NULL
 saveRDS(fung_ps,"./output/fungal_physeq_no_taxonomy.RDS")
 saveRDS(fung,"./output/fungal_asv_table_combined.RDS")
 
+# write ASVs to file for external taxonomic assignment
+fung_reads <- colnames(otu_table(fung_ps))
+names(fung_reads) <- fung_reads
+writeXStringSet(DNAStringSet(fung_reads), "./output/fung_asv.fasta", width=200000)
+
+
 # clean up
 rm("fung")
 gc()
-
