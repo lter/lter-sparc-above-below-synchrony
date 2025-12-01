@@ -1,5 +1,3 @@
-
-
 # SETUP ####
 
 ## packages ####
@@ -26,7 +24,7 @@ bact_tax <-
   assignTaxonomy(bact_reads,
                  refFasta = bact_db,
                  multithread = TRUE,
-                 tryRC = TRUE,
+                 tryRC = FALSE,
                  minBoot = 50)
 
 # run addSpecies algorithm and add to previous tax table
@@ -40,7 +38,7 @@ fung_tax <-
   assignTaxonomy(fung_reads,
                  refFasta = euk_db,
                  multithread = TRUE,
-                 tryRC = TRUE,
+                 tryRC = FALSE,
                  minBoot = 50)
 # save progress
 saveRDS(fung_tax,"./output/fung_tax_table.RDS")
@@ -59,7 +57,8 @@ fung_ps <-
   fung_ps %>% 
   subset_taxa(Kingdom == "Fungi" & !is.na(Phylum))
 
+
+
 # EXPORT ####
 saveRDS(bact_ps, "./output/bacterial_physeq.RDS")
 saveRDS(fung_ps, "./output/fungal_physeq.RDS")
-

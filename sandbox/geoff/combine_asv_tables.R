@@ -4,6 +4,7 @@
 library(dada2)
 library(phyloseq)
 library(tidyverse)
+library(Biostrings)
 
 ## Functions ####
 as_otu <- function(x, taxa_are_rows = FALSE) {
@@ -51,7 +52,7 @@ gc()
 # COMBINE TABLES ####
 
 # combine bacteria
-bact <- bact_asvs %>% reduce(merge_phyloseq)
+bact <- bact_asvs %>% purrr::reduce(merge_phyloseq)
 
 # identify singleton taxa/samples and remove
 bact_good_samples <- rowSums(bact) > 1
@@ -89,7 +90,7 @@ rm(list=c("bact","bact_asvs"))
 gc()
 
 # combine fungi
-fung <- fung_asvs %>% reduce(merge_phyloseq)
+fung <- fung_asvs %>% purrr::reduce(merge_phyloseq)
 
 # identify singleton taxa/samples and remove
 fung_good_samples <- rowSums(fung) > 1

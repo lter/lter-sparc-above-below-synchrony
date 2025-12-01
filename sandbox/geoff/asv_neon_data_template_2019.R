@@ -82,7 +82,7 @@ if(nrow(current_bact) > 0){
   # save output
   outdir <- file.path("output",seqrun,"bacteria")
   if(!dir.exists(outdir)){dir.create(outdir,recursive = TRUE)}
-  saveRDS(bact_seqtab.nochim,file.path(outdir,paste0(seqrun,"_bacteria_seqtab.RDS")))
+  saveRDS(bact_seqtab.nochim,file.path(outdir,paste0(seqrun,'_2019',"_bacteria_seqtab.RDS")))
 }
 
 
@@ -127,6 +127,6 @@ if(nrow(current_fung) > 0){
   # save output
   outdir <- file.path("output",seqrun,"fungi")
   if(!dir.exists(outdir)){dir.create(outdir,recursive = TRUE)}
-  saveRDS(fung_seqtab.nochim,file.path(outdir,paste0(seqrun,"_fungi_seqtab.RDS")))
+  saveRDS(fung_seqtab.nochim,file.path(outdir,paste0(seqrun,'_2019',"_fungi_seqtab.RDS")))
   
 }
