@@ -1,4 +1,5 @@
 # SETUP ####
+# WARNING: this build step needs huge RAM, don't rerun unless absolutely necessary
 
 ## Packages ####
 library(dada2)
@@ -8,8 +9,11 @@ library(Biostrings)
 
 ## Functions ####
 as_otu <- function(x, taxa_are_rows = FALSE) {
-  m <- as.matrix(x)
-  storage.mode(m) <- "integer"
+  m <- as.matrix(x, drop = FALSE)
+  # storage.mode(m) <- "integer"
+  # remove low abundance asvs
+  good_asvs <- colSums(m) > 9
+  m <- m[,good_asvs, drop = FALSE]
   otu_table(m, taxa_are_rows = taxa_are_rows)  # ASVs in columns, samples in rows
 }
 
@@ -97,7 +101,7 @@ fung_good_samples <- rowSums(fung) > 1
 fung_good_taxa <- colSums(fung) > 1
 fung <- fung[fung_good_samples,fung_good_taxa]
 
-# indentify metadata rows for fungeria
+# indentify metadata rows for fungi
 fung_meta <- 
   meta %>% 
   dplyr::filter(rawDataFileName %in% row.names(fung)) %>% 
