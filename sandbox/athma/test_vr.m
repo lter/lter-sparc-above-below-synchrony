@@ -1,3 +1,5 @@
+% Testing variance ratio as a measure of syncrony
+
 clear all
 close all
 
