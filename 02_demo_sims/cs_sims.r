@@ -9,6 +9,8 @@
 # Notes
 ## coupling is measured as mean values of the correlation (sub)matrix
 ## (1/20) scaling standardizes Brownian motion is a slower timescale (400 times = 1/sqrt(400)
+## Code translated from MATLAB using ChatGPT 5.2 and checked line-by-line by Athma
+## issues - fails for more than 1 plant and 1 microbe
 
 cs_sims <- function(np, nm, corr_m, viz = 0) {
   if (!requireNamespace("mvtnorm", quietly = TRUE)) {
@@ -85,6 +87,8 @@ cs_sims <- function(np, nm, corr_m, viz = 0) {
   cov_m <- stats::cov(t(xm))
   vr_m  <- (sum(cov_m) - sum(diag(cov_m))) / sum(diag(cov_m))
   cpl_m <- mean(abs(corr_m[(np + 1):n, (np + 1):n, drop = FALSE]))
+
+	print(cov_pm)
 
   out <- rbind(
  #   cov = c(cov_pm, cov_p, cov_m),
