@@ -31,11 +31,12 @@ cs_sims <- function(np, nm, intm, viz) {
   }
   
   # Visualization
-  if (viz == 1) {
+	if (viz == 1) {
+		dev.new()
     plot(tp, xp[1, ], type = "b", col = "blue", ylim = range(c(xp, xm)), 
          xlab = "Time", ylab = "Variables", main = "Simulation Viz")
     for(r in 2:np) lines(tp, xp[r, ], type = "b", col = "blue")
-    for(r in 1:nm) lines(tm, xm[r, ], col = "gray", alpha = 0.5)
+    for(r in 1:nm) lines(tm, xm[r, ], col = "gray")
   }
   
   # Statistics Calculations

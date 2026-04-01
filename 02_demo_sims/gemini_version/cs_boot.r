@@ -1,11 +1,13 @@
+source("cs_sims.r")
+
 # Setup
 set.seed(1) # Equivalent to rng(1)
 
-np <- 15
-nm <- 100
+np <- 5
+nm <- 10
 n  <- np + nm
 nc <- 2
-bootn <- 2
+bootn <- 10
 
 # Initialize 4D array: [row, col, community, replicate]
 summ <- array(0, dim = c(2, 3, nc, bootn))
