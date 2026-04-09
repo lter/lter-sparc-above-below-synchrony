@@ -3,16 +3,16 @@ source("cs_sims.r")
 # Setup
 set.seed(1) # Equivalent to rng(1)
 
-np <- 15 # number of plants
-nm <- 100 # number of microbes
-n  <- np + nm # total number of species
-nc <- 2 # number of communities
-bootn <- 2 # number of replicates
+np <- 5
+nm <- 10
+n  <- np + nm
+nc <- 2
+bootn <- 10
 
 # Initialize 4D array: [row, col, community, replicate]
 summ <- array(0, dim = c(2, 3, nc, bootn))
 
-start_time <- Sys.time() # to track performance
+start_time <- Sys.time()
 
 for (i in 1:nc) {
   # Create interaction matrix
@@ -28,7 +28,7 @@ for (i in 1:nc) {
   print(paste("Community:", i))
 }
 
-print(Sys.time() - start_time) # how long did the simulations take? 
+print(Sys.time() - start_time)
 
 # --- Plotting Results ---
 
