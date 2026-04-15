@@ -1,3 +1,16 @@
+# Author - Athma, Comments - Athma and Jeremy
+# Last updates - 4/1/2026
+# Brief description - Simulates a community of multiple plant species and microbial species
+
+# Inputs - np: number of plant species, nm: number of microbial species, corr_m: correlation matrix, viz: 0/1 to plot
+
+# Outputs - timeseries plot if viz ==1, matrix of covariance, coupling and variance ratio for both plants and microbes, plants only and microbes only
+
+# Notes
+## coupling is measured as mean values of the correlation (sub)matrix
+## (1/20) scaling standardizes Brownian motion is a slower timescale (400 times = 1/sqrt(400)
+## Code translated from MATLAB using Gemini and checked line-by-line by Athma and Jeremy
+
 library(mvtnorm)
 
 cs_sims <- function(np, nm, intm, viz) {

@@ -5,7 +5,7 @@ function out=cs_sims(np,nm,intm,viz)
 %viz: 0 no plot, 1 plot
 %int_m interaction matrix - affects correlation of multivariate normal random sampling 
 
-	close all
+	%close all
 
 	%rng(1)
 	%tic()
@@ -19,12 +19,13 @@ function out=cs_sims(np,nm,intm,viz)
 	xp=ones(np,length(tp));
 	xm=ones(nm,length(tm));
 
-
-	intm=0.01*randn(n,n);
-	for j=1:n
-		intm(j,j)=1;
+	if isempty(intm)
+		intm=0.01*randn(n,n);
+		for j=1:n
+			intm(j,j)=1;
+		end
+		intm=intm*intm';
 	end
-	intm=intm*intm'
 
 	%assuming we don't see changes in plants intrannually but they are still sampled intraannually to show effect on microbe
 
@@ -53,15 +54,15 @@ function out=cs_sims(np,nm,intm,viz)
 		ylabel('Variables');
 	end
 
-	cov_pm=cov([xp; ym]);
+	cov_pm=cov([xp; ym]');
 	vr_pm=(sum(sum(cov_pm))-sum(diag(cov_pm)))/sum(diag(cov_pm));
 	cpl_pm=mean(mean(abs(intm)));
 
-	cov_p=cov(xp);
+	cov_p=cov(xp');
 	vr_p=(sum(sum(cov_p))-sum(diag(cov_p)))/sum(diag(cov_p));
 	cpl_p=mean(mean(abs(intm(1:np,1:np))));
 
-	cov_m=cov(xm);
+	cov_m=cov(xm');
 	vr_m=(sum(sum(cov_m))-sum(diag(cov_m)))/sum(diag(cov_m));
 	cpl_m=mean(mean(abs(intm(np+1:end,np+1:end))));
 

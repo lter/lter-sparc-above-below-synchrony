@@ -4,11 +4,11 @@ close all
 
 rng(1)
 
-np=15;
-nm=100;
+np=5;
+nm=10;
 n=np+nm;
 
-nc=20; % 10 random communities
+nc=5; % 10 random communities
 bootn=10;
 
 summ=zeros(2,3,nc,bootn);

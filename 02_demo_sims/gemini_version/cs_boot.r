@@ -3,11 +3,11 @@ source("cs_sims.r")
 # Setup
 set.seed(1) # Equivalent to rng(1)
 
-np <- 15 # number of plants
-nm <- 100 # number of microbes
+np <- 5 # number of plants
+nm <- 10 # number of microbes
 n  <- np + nm # total number of species
-nc <- 2 # number of communities
-bootn <- 2 # number of replicates
+nc <- 20 # number of communities
+bootn <- 10 # number of replicates
 
 # Initialize 4D array: [row, col, community, replicate]
 summ <- array(0, dim = c(2, 3, nc, bootn))
