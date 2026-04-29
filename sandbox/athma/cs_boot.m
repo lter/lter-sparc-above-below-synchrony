@@ -2,16 +2,16 @@
 clear all
 close all
 
-rng(1)
+%rng(1)
 
 np=5;
 nm=10;
 n=np+nm;
 
-nc=5; % 10 random communities
-bootn=10;
+nc=2; % 10 random communities
+bootn=2;
 
-summ=zeros(2,3,nc,bootn);
+summ=zeros(3,3,nc,bootn);
 
 tic		
 for i=1:nc
@@ -23,7 +23,6 @@ for i=1:nc
 
 	for k=1:bootn
 		if i==1 && k==bootn
-			figure(1)
 			summ(:,:,i,k)=cs_sims(np,nm,intm,1);
 		else
 			summ(:,:,i,k)=cs_sims(np,nm,intm,0);
@@ -41,3 +40,8 @@ plot(reshape(squeeze(summ(1,1,:,:)),[nc*bootn 1]),reshape(squeeze(summ(2,3,:,:))
 xlabel("Coupling");
 ylabel("Variance ratio")
 legend({"pm","p","m"});
+
+figure(3)
+plot(reshape(squeeze(summ(1,1,:,:)),[nc*bootn 1]),reshape(squeeze(summ(3,1,:,:)),[nc*bootn 1]),'*');
+xlabel("Coupling initial");
+ylabel("Coupling observed")

@@ -6,6 +6,5 @@
 * coupling (Raul's method); average of correlation between all species in each time point
 
 1. How common is plant-microbe syncrony? distribution of syncrony in random communities
-2. coupling vs syncrony
-3. n vs syncrony
-4. distubrance vs syncrony
+2. n vs syncrony (violin plot with np on x and syncrony measure (average obs. correlation or variance ratio)
+3. distubrance vs syncrony?
