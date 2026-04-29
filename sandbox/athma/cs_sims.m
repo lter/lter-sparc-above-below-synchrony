@@ -59,7 +59,7 @@ function out=cs_sims(np,nm,intm,viz)
 
 	cov_pm=cov([xp; ym]');
 	vr_pm=(sum(sum(cov_pm))-sum(diag(cov_pm)))/sum(diag(cov_pm));
-	cpl_pm=mean(mean(abs(intm)));
+	cpl_pm=mean(mean(intm));
 	r_cpl_pm=mean(mean(cov_pm));
 
 	cov_p=cov(xp');
