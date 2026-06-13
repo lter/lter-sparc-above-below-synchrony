@@ -1,0 +1,6 @@
+# Copy this file to .Renviron and set SABRE_ROOT to the local path of the
+# SABRE SPARC project Google Drive (LTER-SPARC_Above-Below-Synchrony).
+# usethis::edit_r_environ("project") opens .Renviron for editing.
+# Restart R after making changes, or run readRenviron(path)
+
+SABRE_ROOT=/path/to/LTER-SPARC_Above-Below-Synchrony
