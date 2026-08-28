@@ -25,11 +25,16 @@ queries <- list(
   # aboveground biomass, npp, etc
   "above*&biomass" = "q=subject:(subject:(plant* OR vegetation OR aboveground OR above-ground OR 'above ground') AND subject:(biomass OR NPP OR producti* OR growth OR exchange))",
   # aboveground cover, community composition, diversity, etc
-  "above*&comm" = "q=subject:(subject:(plant* OR vegetation OR aboveground OR above-ground OR 'above ground') AND subject:(community OR cover OR composition OR *diversity))"
+  "above*&comm" = "q=subject:(subject:(plant* OR vegetation OR aboveground OR above-ground OR 'above ground') AND subject:(community OR cover OR composition OR *diversity))",
+  # Soil fauna
+  "soilfauna" = "q=subject:(subject:(nema* OR euk* OR fauna) AND subject:(soil))",
+  # Flux
+  "flux" = "q=subject:(subject:(flux* OR eddy* OR NEE) AND subject:(ecosystem))"
 )
 
 # Search parameters specific to EDI's solr instance - apply to all searches
-params = 'fl=packageid,title,doi&fq=-scope:(ecotrends+lter-landsat*+knb-lter-mcm)'
+params = paste0('key=', Sys.getenv("EDI_KEY"),
+                '&fl=packageid,title,doi&fq=-scope:(ecotrends+lter-landsat*+knb-lter-mcm)')
 
 # Search with EDIutils function
 # Note that spaces must be encoded with "%20"

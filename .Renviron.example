@@ -4,3 +4,5 @@
 # Restart R after making changes, or run readRenviron(path)
 
 SABRE_ROOT=/path/to/LTER-SPARC_Above-Below-Synchrony
+
+EDI_KEY="<paste access key from https://auth.edirepository.org here>"

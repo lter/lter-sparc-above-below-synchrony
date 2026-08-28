@@ -4,7 +4,7 @@ These are data discovery materials for an ecological synthesis research project 
 
 **Materials here:**
 
-* `edi-search.R` is a query script written in R. It uses the EDI repository's [PASTA REST API](https://pastaplus-core.readthedocs.io/en/latest/doc_tree/pasta_api/index.html) to query an Apache Solr index for datasets in the repository matching some search terms relevant to the research goals of the group. There are two queries in it.
+* `edi-search.R` is a query script written in R. It uses the EDI repository's [PASTA REST API](https://pastaplus-core.readthedocs.io/en/latest/doc_tree/pasta_api/index.html) to query an Apache Solr index for datasets in the repository matching some search terms relevant to the research goals of the group. There are several queries in it.
 * `dataONE-search.R` is another R query script similar to the above but for the DataONE API.
 * `explore_metadata.R` has preliminary analyses of the data discovery results
 * `wget_eml.py` python script used to download EML files from EDI.
